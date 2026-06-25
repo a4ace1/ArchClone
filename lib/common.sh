@@ -8,4 +8,4 @@ source "$PROJECT_ROOT/lib/logging.sh"
 source "$PROJECT_ROOT/lib/utils.sh"
 source "$PROJECT_ROOT/lib/discovery.sh"
 source "$PROJECT_ROOT/lib/manifest.sh"
-
+source "$PROJECT_ROOT/lib/plugin_loader.sh"

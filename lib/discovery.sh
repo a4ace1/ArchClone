@@ -205,3 +205,49 @@ discover_wallpaper_manager() {
 
     echo "unknown"
 }
+discover_fonts() {
+
+    local dirs=(
+        "$HOME/.local/share/fonts"
+        "$HOME/.fonts"
+    )
+
+    for dir in "${dirs[@]}"; do
+        [[ -d "$dir" ]] && echo "$dir"
+    done
+}
+discover_themes() {
+
+    local dirs=(
+        "$HOME/.themes"
+        "$HOME/.local/share/themes"
+    )
+
+    for dir in "${dirs[@]}"; do
+        [[ -d "$dir" ]] && echo "$dir"
+    done
+}
+discover_icons() {
+
+    local dirs=(
+        "$HOME/.icons"
+        "$HOME/.local/share/icons"
+    )
+
+    for dir in "${dirs[@]}"; do
+        [[ -d "$dir" ]] && echo "$dir"
+    done
+}
+discover_wallpapers() {
+
+    local dirs=(
+        "$HOME/Wallpapers"
+        "$HOME/Pictures/Wallpapers"
+        "$HOME/.wallpapers"
+        "$HOME/.config/hypr/wallpapers"
+    )
+
+    for dir in "${dirs[@]}"; do
+        [[ -d "$dir" ]] && echo "$dir"
+    done
+}
