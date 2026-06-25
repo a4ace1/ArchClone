@@ -20,4 +20,13 @@ generate_manifest "$BACKUP_ROOT"
 
 run_backup_plugins "$BACKUP_ROOT"
 
+generate_checksums "$BACKUP_ROOT"
+
+
+TIMESTAMP="$(date +%F-%H%M%S)"
+
+create_archive \
+    "$BACKUP_ROOT" \
+    "${BACKUP_ROOT}-${TIMESTAMP}.tar.zst"
+
 success "Backup completed successfully."
