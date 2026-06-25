@@ -240,14 +240,22 @@ discover_icons() {
 }
 discover_wallpapers() {
 
-    local dirs=(
+    local candidates=(
         "$HOME/Wallpapers"
         "$HOME/Pictures/Wallpapers"
+        "$HOME/Pictures"
         "$HOME/.wallpapers"
         "$HOME/.config/hypr/wallpapers"
     )
 
-    for dir in "${dirs[@]}"; do
-        [[ -d "$dir" ]] && echo "$dir"
+    for dir in "${candidates[@]}"; do
+        [[ -d "$dir" ]] && printf "%s\n" "$dir"
     done
+
+    if [[ -f "$HOME/.config/hypr/hyprland.conf" ]]; then
+        grep -Eo '/[^", ]+\.(png|jpg|jpeg|webp|gif)' \
+            "$HOME/.config/hypr/hyprland.conf" 2>/dev/null | \
+            xargs -r -n1 dirname | \
+            sort -u
+    fi
 }

@@ -9,7 +9,7 @@ set -Eeuo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 
 
-export_packages() {
+backup_packages() {
 
     local outdir="$1/packages"
 

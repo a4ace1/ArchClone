@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+
+cat <<EOF
+ArchForge
+
+Usage:
+
+    ./archforge backup <directory>
+
+    ./archforge restore <directory>
+
+    ./archforge verify <directory>
+
+    ./archforge doctor
+
+    ./archforge version
+
+EOF
+
+}
+
+case "${1:-}" in
+
+backup)
+
+    shift
+
+    exec "$PROJECT_ROOT/backup.sh" "$@"
+
+    ;;
+
+restore)
+
+    shift
+
+    exec "$PROJECT_ROOT/restore.sh" "$@"
+
+    ;;
+
+verify)
+
+    shift
+
+    exec "$PROJECT_ROOT/verify.sh" "$@"
+
+    ;;
+
+doctor)
+
+    exec "$PROJECT_ROOT/doctor.sh"
+
+    ;;
+
+version)
+
+    echo "ArchForge v0.8.0"
+
+    ;;
+
+*)
+
+    usage
+
+    exit 1
+
+    ;;
+
+esac
