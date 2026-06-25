@@ -6,8 +6,8 @@
 
 set -Eeuo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/utils.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/logging.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
+
 
 export_packages() {
 
