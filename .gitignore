@@ -1,0 +1,28 @@
+# Logs
+logs/
+
+# Backup output
+backups/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Shell history
+.history
+
+# Generated archives
+*.tar
+*.tar.gz
+*.tar.zst
+
+# Checksums
+SHA256SUMS
