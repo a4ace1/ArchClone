@@ -7,6 +7,8 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$PROJECT_ROOT/lib/common.sh"
 source "$PROJECT_ROOT/modules/packages.sh"
 source "$PROJECT_ROOT/modules/dotfiles.sh"
+source "$PROJECT_ROOT/modules/fonts.sh"
+source "$PROJECT_ROOT/modules/icons.sh"
 
 if [[ $# -ne 1 ]]; then
     echo "Usage:"
@@ -27,5 +29,9 @@ generate_manifest "$BACKUP_ROOT"
 export_packages "$BACKUP_ROOT"
 
 backup_dotfiles "$BACKUP_ROOT"
+
+backup_fonts "$BACKUP_ROOT"
+
+backup_icons "$BACKUP_ROOT"
 
 success "Backup completed successfully."
