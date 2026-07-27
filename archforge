@@ -59,7 +59,7 @@ doctor)
 
 version)
 
-    echo "ArchForge v0.8.0"
+    echo "ArchForge v1.0.1"
 
     ;;
 
