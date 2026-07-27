@@ -6,7 +6,7 @@
 
 set -Eeuo pipefail
 
-LOG_FILE=""
+: "${LOG_FILE:=}"
 
 init_logger() {
     local log_dir="$1"
@@ -33,6 +33,11 @@ _log() {
         "$level" \
         "\033[0m" \
         "$message"
+
+echo "========== DEBUG ==========" >&2
+echo "LOG_FILE='$LOG_FILE'" >&2
+echo "PWD='$(pwd)'" >&2
+echo "===========================" >&2
 
     printf "[%s] [%s] %s\n" \
         "$(_timestamp)" \

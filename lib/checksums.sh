@@ -2,7 +2,6 @@
 
 set -Eeuo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/logging.sh"
 
 generate_checksums() {
 
