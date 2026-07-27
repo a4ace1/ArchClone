@@ -4,6 +4,9 @@ set -Eeuo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+source "$PROJECT_ROOT/lib/banner.sh"
+show_banner
+
 source "$PROJECT_ROOT/lib/common.sh"
 source "$PROJECT_ROOT/lib/plugin_loader.sh"
 
