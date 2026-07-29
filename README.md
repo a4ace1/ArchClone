@@ -1,8 +1,8 @@
-# ArchForge
+# ArchClone
 
 > A modular backup framework for Arch Linux.
 
-ArchForge is a plugin-based backup and restore framework written in Bash that helps you preserve your Linux environment, configuration, packages, themes, fonts, wallpapers, and other essential data.
+ArchClone is a plugin-based backup and restore framework written in Bash that helps you preserve your Linux environment, configuration, packages, themes, fonts, wallpapers, and other essential data.
 
 ---
 
@@ -42,8 +42,8 @@ ArchForge is a plugin-based backup and restore framework written in Bash that he
 ## Installation
 
 ```bash
-git clone git@github.com:a4ace1/Archforge.git
-cd Archforge
+git clone git@github.com:a4ace1/ArchClone.git
+cd ArchClone
 ./install.sh
 ```
 
@@ -80,7 +80,7 @@ Run diagnostics
 ## Project Structure
 
 ```
-Archforge/
+ArchClone/
 ├── backup.sh
 ├── restore.sh
 ├── verify.sh
@@ -97,7 +97,7 @@ Archforge/
 
 ## Architecture
 
-ArchForge follows a plugin-based architecture.
+ArchClone follows a plugin-based architecture.
 
 Each module is responsible for backing up a specific component of the system.
 

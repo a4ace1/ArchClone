@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Dotfiles Restore
+# ArchClone Dotfiles Restore
 # ==========================================================
 
 set -Eeuo pipefail

@@ -7,7 +7,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$PROJECT_ROOT/lib/common.sh"
 source "$PROJECT_ROOT/modules/fonts.sh"
 
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archforge-fonts-test.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archclone-fonts-test.XXXXXX")"
 trap 'rm -rf "$SANDBOX"' EXIT
 
 # Fake a $HOME with two distinct font source directories, which is

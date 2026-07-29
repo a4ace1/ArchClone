@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 source lib/discovery.sh
 
-echo "===== ArchForge Discovery Test ====="
+echo "===== ArchClone Discovery Test ====="
 
 echo "Hostname     : $(discover_hostname)"
 echo "Kernel       : $(discover_kernel)"

@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Package Inventory
+# ArchClone Package Inventory
 # ==========================================================
 
 set -Eeuo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 
-# _archforge_pip_cmd
+# _archclone_pip_cmd
 #
 # Prefers `pip3` (the canonical name on most modern distros,
 # including Arch) but falls back to `pip` if that's all that's
 # available. Prints nothing if neither exists.
-_archforge_pip_cmd() {
+_archclone_pip_cmd() {
     if command_exists pip3; then
         echo "pip3"
     elif command_exists pip; then
@@ -80,7 +80,7 @@ backup_packages() {
 
     # pip / pip3 (prefer pip3; fall back to pip)
     local pip_cmd
-    pip_cmd="$(_archforge_pip_cmd)"
+    pip_cmd="$(_archclone_pip_cmd)"
     if [[ -n "$pip_cmd" ]]; then
         if "$pip_cmd" list --format=freeze > "$outdir/pip.txt" 2>/dev/null; then
             success "pip packages exported (via $pip_cmd)"

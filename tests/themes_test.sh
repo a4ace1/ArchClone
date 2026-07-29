@@ -7,7 +7,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$PROJECT_ROOT/lib/common.sh"
 source "$PROJECT_ROOT/modules/themes.sh"
 
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archforge-themes-test.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archclone-themes-test.XXXXXX")"
 trap 'rm -rf "$SANDBOX"' EXIT
 
 export HOME="$SANDBOX/home"

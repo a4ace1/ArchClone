@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Version Library
+# ArchClone Version Library
 #
 # Single source of truth for the project version.
 # Every script/module that needs the version number should
@@ -9,8 +9,8 @@
 # ==========================================================
 
 # Guard against being sourced multiple times from different
-# entry points (backup.sh, restore.sh, archforge, tests, ...).
-if [[ -n "${ARCHFORGE_VERSION:-}" ]]; then
+# entry points (backup.sh, restore.sh, archclone, tests, ...).
+if [[ -n "${ARCHCLONE_VERSION:-}" ]]; then
     # False positive: this is the standard "work whether sourced or
     # executed directly" guard. `return` exits this file's sourcing
     # when sourced; if this file is somehow executed directly instead
@@ -20,19 +20,19 @@ if [[ -n "${ARCHFORGE_VERSION:-}" ]]; then
     return 0 2>/dev/null || exit 0
 fi
 
-_archforge_version_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ARCHFORGE_PROJECT_ROOT="$(cd "$_archforge_version_lib_dir/.." && pwd)"
-ARCHFORGE_VERSION_FILE="$ARCHFORGE_PROJECT_ROOT/VERSION"
+_archclone_version_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ARCHCLONE_PROJECT_ROOT="$(cd "$_archclone_version_lib_dir/.." && pwd)"
+ARCHCLONE_VERSION_FILE="$ARCHCLONE_PROJECT_ROOT/VERSION"
 
-if [[ -r "$ARCHFORGE_VERSION_FILE" ]]; then
-    ARCHFORGE_VERSION="$(tr -d '[:space:]' < "$ARCHFORGE_VERSION_FILE")"
+if [[ -r "$ARCHCLONE_VERSION_FILE" ]]; then
+    ARCHCLONE_VERSION="$(tr -d '[:space:]' < "$ARCHCLONE_VERSION_FILE")"
 else
-    # Should never happen in a correctly installed copy of ArchForge,
+    # Should never happen in a correctly installed copy of ArchClone,
     # but fail soft rather than crashing every script that sources us.
-    ARCHFORGE_VERSION="unknown"
+    ARCHCLONE_VERSION="unknown"
 fi
 
-unset _archforge_version_lib_dir
+unset _archclone_version_lib_dir
 
-readonly ARCHFORGE_VERSION
-export ARCHFORGE_VERSION
+readonly ARCHCLONE_VERSION
+export ARCHCLONE_VERSION

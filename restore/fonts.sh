@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Fonts Restore
+# ArchClone Fonts Restore
 # ==========================================================
 
 set -Eeuo pipefail

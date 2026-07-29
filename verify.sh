@@ -14,7 +14,7 @@ cat <<EOF
 Usage:
   ./verify.sh <backup-directory-or-archive>
 
-Verifies the integrity of an ArchForge backup by checking its
+Verifies the integrity of an ArchClone backup by checking its
 SHA-256 checksums (checksums.sha256) and confirming a valid
 manifest.json is present. Accepts either an extracted backup
 directory or a compressed archive (.tar.zst / .tar.gz / .tgz / .tar).
@@ -39,7 +39,7 @@ trap cleanup EXIT
 if [[ -d "$INPUT" ]]; then
     BACKUP_ROOT="$INPUT"
 elif is_archive_file "$INPUT"; then
-    TMP_EXTRACT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/archforge-verify.XXXXXX")"
+    TMP_EXTRACT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/archclone-verify.XXXXXX")"
     extract_archive "$INPUT" "$TMP_EXTRACT_DIR"
     BACKUP_ROOT="$(find_backup_root "$TMP_EXTRACT_DIR")"
 else
@@ -49,7 +49,7 @@ fi
 init_logger "$BACKUP_ROOT"
 
 if [[ ! -f "$BACKUP_ROOT/manifest.json" ]]; then
-    die "manifest.json missing — '$BACKUP_ROOT' doesn't look like an ArchForge backup."
+    die "manifest.json missing — '$BACKUP_ROOT' doesn't look like an ArchClone backup."
 fi
 success "manifest.json present."
 

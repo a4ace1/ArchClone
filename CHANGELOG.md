@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ArchForge are documented here.
+All notable changes to ArchClone are documented here.
 
 ## [1.0.1] - Unreleased
 
@@ -20,7 +20,7 @@ All notable changes to ArchForge are documented here.
   always redirects its own stdin from `/dev/null` (`lib/archive.sh`), so it
   can never consume bytes meant for a confirmation prompt. The restore
   confirmation is the *only* place stdin is read in the whole restore flow.
-  Added `-y`/`--yes` (and `ARCHFORGE_YES=1`) for non-interactive/CI use, and
+  Added `-y`/`--yes` (and `ARCHCLONE_YES=1`) for non-interactive/CI use, and
   a clear error instead of a hang when stdin is neither a terminal nor a
   pipe.
 - **`lib/logging.sh`** had a leftover debug block dumping `LOG_FILE`/`PWD`
@@ -67,7 +67,7 @@ All notable changes to ArchForge are documented here.
   dependency, permission, disk-space, and environment checks.
 - **`install.sh` was empty.** It now sets executable permissions, runs
   `doctor.sh`, optionally installs missing dependencies via `pacman` on
-  Arch systems, and optionally symlinks the `archforge` launcher onto
+  Arch systems, and optionally symlinks the `archclone` launcher onto
   `$PATH` — all prompts fall back to a safe default instead of hanging
   when stdin isn't interactive (CI-safe).
 - **`packages.sh` (backup) piped commands directly into files** under
@@ -93,7 +93,7 @@ All notable changes to ArchForge are documented here.
   `packages`). There is no prior working restore path to migrate from.
 - Package restoration (`restore/packages.sh`) requires the relevant
   package manager (pacman, yay, flatpak, npm, pip/pip3, pipx, cargo) to
-  already be present on the target system; ArchForge does not bootstrap
+  already be present on the target system; ArchClone does not bootstrap
   package managers themselves.
 - `install.sh`'s automatic dependency installation only applies on
   systems with `pacman` (Arch and Arch-based distros); on other systems,

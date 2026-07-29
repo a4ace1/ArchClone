@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Logging Library
+# ArchClone Logging Library
 # ==========================================================
 
 set -Eeuo pipefail
@@ -13,7 +13,7 @@ init_logger() {
 
     mkdir -p "$log_dir"
 
-    LOG_FILE="$log_dir/archforge.log"
+    LOG_FILE="$log_dir/archclone.log"
 
     touch "$LOG_FILE"
 }

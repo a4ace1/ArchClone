@@ -18,7 +18,7 @@ generate_checksums() {
         # shellcheck disable=SC2094
         find . -type f \
             ! -name checksums.sha256 \
-            ! -name archforge.log \
+            ! -name archclone.log \
             -print0 |
             sort -z |
             xargs -0 sha256sum \

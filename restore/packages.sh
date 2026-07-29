@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Package Restore
+# ArchClone Package Restore
 #
 # Unlike the original stub, this module actually performs the
 # restoration (installs the packages) instead of merely printing
 # the commands a user could run. Each package manager is only
 # invoked if it is present on the system, and the whole step is
-# skippable via ARCHFORGE_SKIP_PACKAGES=1 for environments where
+# skippable via ARCHCLONE_SKIP_PACKAGES=1 for environments where
 # reinstalling system packages isn't desired (e.g. CI, containers).
 # ==========================================================
 
@@ -23,8 +23,8 @@ restore_packages() {
         return 0
     fi
 
-    if [[ "${ARCHFORGE_SKIP_PACKAGES:-0}" == "1" ]]; then
-        warn "ARCHFORGE_SKIP_PACKAGES=1 set, skipping package restoration."
+    if [[ "${ARCHCLONE_SKIP_PACKAGES:-0}" == "1" ]]; then
+        warn "ARCHCLONE_SKIP_PACKAGES=1 set, skipping package restoration."
         return 0
     fi
 

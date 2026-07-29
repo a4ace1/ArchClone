@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Wallpapers Restore
+# ArchClone Wallpapers Restore
 # ==========================================================
 
 set -Eeuo pipefail

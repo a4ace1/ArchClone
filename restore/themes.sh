@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Themes Restore
+# ArchClone Themes Restore
 # ==========================================================
 
 set -Eeuo pipefail

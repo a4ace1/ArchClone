@@ -29,7 +29,7 @@ create_archive() {
 
 # is_archive_file <path>
 #
-# Returns 0 if path looks like an ArchForge archive (.tar.zst / .tar.gz / .tgz / .tar).
+# Returns 0 if path looks like an ArchClone archive (.tar.zst / .tar.gz / .tgz / .tar).
 is_archive_file() {
     local path="$1"
 
@@ -47,7 +47,7 @@ is_archive_file() {
 
 # extract_archive <archive_file> <destination_dir>
 #
-# Extracts an ArchForge backup archive into destination_dir.
+# Extracts an ArchClone backup archive into destination_dir.
 #
 # IMPORTANT (stdin safety):
 # tar is given an explicit archive file via -f, so it never needs to
@@ -55,7 +55,7 @@ is_archive_file() {
 # /dev/null defensively so that, no matter how this function is
 # invoked (including from inside a pipeline or a `while read` loop),
 # tar can never consume bytes that were meant for an interactive or
-# piped confirmation prompt (e.g. `yes | ./archforge restore x.tar.zst`).
+# piped confirmation prompt (e.g. `yes | ./archclone restore x.tar.zst`).
 # This is what caused the historical "Please answer yes or no." /
 # stuck-prompt bug: an earlier extraction step lived inside the same
 # pipeline as the confirmation read, so the piped "yes" answer was
@@ -89,7 +89,7 @@ extract_archive() {
 
 # find_backup_root <extracted_dir>
 #
-# ArchForge archives are created with `tar -C "$(dirname dir)" "$(basename dir)"`,
+# ArchClone archives are created with `tar -C "$(dirname dir)" "$(basename dir)"`,
 # so extracting them yields exactly one top-level directory containing the
 # actual backup contents (manifest.json, checksums.sha256, ...). This helper
 # locates that directory so callers don't have to guess the original name.

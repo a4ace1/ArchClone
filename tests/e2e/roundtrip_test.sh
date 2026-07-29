@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge End-to-End Round-Trip Test
+# ArchClone End-to-End Round-Trip Test
 #
 # Simulates a full backup -> verify -> compress -> restore cycle
 # against a throwaway fake $HOME, covering:
@@ -35,7 +35,7 @@ check() {
     fi
 }
 
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archforge-e2e.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archclone-e2e.XXXXXX")"
 cleanup() { rm -rf "$SANDBOX"; }
 trap cleanup EXIT
 
@@ -63,13 +63,13 @@ echo "wallpaper-bytes" > "$ALICE_HOME/Pictures/Wallpapers/sunset.png"
 
 echo
 echo "== Step 1: backup.sh (as HOME=$ALICE_HOME) =="
-BACKUP_DIR="$SANDBOX/archforge-backup"
+BACKUP_DIR="$SANDBOX/archclone-backup"
 HOME="$ALICE_HOME" "$PROJECT_ROOT/backup.sh" "$BACKUP_DIR"
 
 check "manifest.json created" test -f "$BACKUP_DIR/manifest.json"
 check "checksums.sha256 created" test -f "$BACKUP_DIR/checksums.sha256"
-check "compressed archive created" bash -c 'ls '"$SANDBOX"'/archforge-backup-*.tar.zst >/dev/null 2>&1'
-ARCHIVE="$(find "$SANDBOX" -maxdepth 1 -name "archforge-backup-*.tar.zst" -print -quit)"
+check "compressed archive created" bash -c 'ls '"$SANDBOX"'/archclone-backup-*.tar.zst >/dev/null 2>&1'
+ARCHIVE="$(find "$SANDBOX" -maxdepth 1 -name "archclone-backup-*.tar.zst" -print -quit)"
 
 check "user .fonts dir preserved distinctly" test -f "$BACKUP_DIR/home/.fonts/a.ttf"
 check "user local/share/fonts dir preserved distinctly" test -f "$BACKUP_DIR/home/.local/share/fonts/b.ttf"
@@ -88,7 +88,7 @@ echo
 echo "== Step 4: restore.sh from the extracted directory (into HOME=bob) =="
 BOB_HOME="$SANDBOX/home-bob"
 mkdir -p "$BOB_HOME"
-HOME="$BOB_HOME" ARCHFORGE_SKIP_PACKAGES=1 "$PROJECT_ROOT/restore.sh" "$BACKUP_DIR" --yes --home "$BOB_HOME"
+HOME="$BOB_HOME" ARCHCLONE_SKIP_PACKAGES=1 "$PROJECT_ROOT/restore.sh" "$BACKUP_DIR" --yes --home "$BOB_HOME"
 
 check "bob: .bashrc restored" test -f "$BOB_HOME/.bashrc"
 check "bob: .fonts/a.ttf restored" test -f "$BOB_HOME/.fonts/a.ttf"
@@ -104,7 +104,7 @@ echo
 echo "== Step 5: restore.sh directly from the .tar.zst archive (into HOME=carol) =="
 CAROL_HOME="$SANDBOX/home-carol"
 mkdir -p "$CAROL_HOME"
-HOME="$CAROL_HOME" ARCHFORGE_SKIP_PACKAGES=1 "$PROJECT_ROOT/restore.sh" "$ARCHIVE" --yes --home "$CAROL_HOME"
+HOME="$CAROL_HOME" ARCHCLONE_SKIP_PACKAGES=1 "$PROJECT_ROOT/restore.sh" "$ARCHIVE" --yes --home "$CAROL_HOME"
 
 check "carol: .bashrc restored from archive" test -f "$CAROL_HOME/.bashrc"
 check "carol: theme restored from archive" test -f "$CAROL_HOME/.themes/MyTheme/index.theme"

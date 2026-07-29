@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Utility Library
+# ArchClone Utility Library
 # Common helper functions
 # ==========================================================
 

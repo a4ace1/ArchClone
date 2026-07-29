@@ -16,7 +16,7 @@ check_pass() { printf "  [OK]   %s\n" "$1"; }
 check_warn() { printf "  [WARN] %s\n" "$1"; }
 check_fail() { printf "  [FAIL] %s\n" "$1"; ISSUES=$((ISSUES + 1)); }
 
-echo "ArchForge Doctor — v${ARCHFORGE_VERSION}"
+echo "ArchClone Doctor — v${ARCHCLONE_VERSION}"
 echo
 
 echo "== Required dependencies =="

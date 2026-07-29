@@ -12,7 +12,7 @@ cat <<EOF
 Usage:
   ./backup.sh <backup-directory>
 
-Creates a new ArchForge backup under <backup-directory> and produces
+Creates a new ArchClone backup under <backup-directory> and produces
 a compressed <backup-directory>-<timestamp>.tar.zst archive next to it.
 EOF
 }

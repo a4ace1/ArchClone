@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Discovery Library
+# ArchClone Discovery Library
 #
 # NOTE on exit statuses: every public discover_* function is safe to
 # call as a bare statement under `set -e` (as the tests and manifest

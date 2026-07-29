@@ -7,7 +7,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$PROJECT_ROOT/lib/common.sh"
 source "$PROJECT_ROOT/restore/packages.sh"
 
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archforge-restore-packages-test.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archclone-restore-packages-test.XXXXXX")"
 trap 'rm -rf "$SANDBOX"' EXIT
 
 TEST="$SANDBOX/backup"
@@ -19,10 +19,10 @@ mkdir -p "$TEST"
 restore_packages "$TEST"
 
 echo
-echo "--- Case 2: packages/ present but ARCHFORGE_SKIP_PACKAGES=1 (should skip) ---"
+echo "--- Case 2: packages/ present but ARCHCLONE_SKIP_PACKAGES=1 (should skip) ---"
 mkdir -p "$TEST/packages"
 echo "some-package" > "$TEST/packages/pacman.txt"
-ARCHFORGE_SKIP_PACKAGES=1 restore_packages "$TEST"
+ARCHCLONE_SKIP_PACKAGES=1 restore_packages "$TEST"
 
 echo
 echo "--- Case 3: packages/ present, no package managers on PATH (should warn + no-op per manager) ---"

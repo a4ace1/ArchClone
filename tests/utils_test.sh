@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 source lib/utils.sh
 
-echo "== ArchForge Utils Test =="
+echo "== ArchClone Utils Test =="
 
 command_exists bash && echo "✔ command_exists"
 

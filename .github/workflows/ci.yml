@@ -20,7 +20,7 @@ jobs:
           while IFS= read -r -d '' f; do
             echo "Checking: $f"
             bash -n "$f" || fail=1
-          done < <(find . \( -name "*.sh" -o -name "archforge" \) -print0)
+          done < <(find . \( -name "*.sh" -o -name "archclone" \) -print0)
           exit "$fail"
 
       - name: ShellCheck
@@ -28,7 +28,7 @@ jobs:
         with:
           scandir: '.'
           severity: warning
-          additional_files: 'archforge'
+          additional_files: 'archclone'
 
   unit-tests:
     runs-on: ubuntu-latest

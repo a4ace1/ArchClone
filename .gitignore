@@ -31,4 +31,4 @@ SHA256SUMS
 /test_backup/
 /logs/
 *.tar.zst
-archforge.log
+archclone.log

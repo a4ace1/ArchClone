@@ -39,13 +39,13 @@ install_prompt() {
     esac
 }
 
-echo "Installing ArchForge v${ARCHFORGE_VERSION}..."
+echo "Installing ArchClone v${ARCHCLONE_VERSION}..."
 echo
 
 # --- 1. Set executable permissions ----------------------------------
 echo "Setting executable permissions..."
 chmod +x \
-    "$PROJECT_ROOT/archforge" \
+    "$PROJECT_ROOT/archclone" \
     "$PROJECT_ROOT/backup.sh" \
     "$PROJECT_ROOT/restore.sh" \
     "$PROJECT_ROOT/verify.sh" \
@@ -58,7 +58,7 @@ echo
 echo "Checking environment..."
 "$PROJECT_ROOT/doctor.sh" || {
     echo
-    echo "Warning: doctor.sh reported issues. ArchForge may not work" >&2
+    echo "Warning: doctor.sh reported issues. ArchClone may not work" >&2
     echo "correctly until they are resolved (see above)." >&2
 }
 echo
@@ -89,10 +89,10 @@ echo
 
 # --- 4. Offer to install a launcher on PATH --------------------------
 DEFAULT_BIN_DIR="$HOME/.local/bin"
-if install_prompt "Install the 'archforge' launcher to $DEFAULT_BIN_DIR?"; then
+if install_prompt "Install the 'archclone' launcher to $DEFAULT_BIN_DIR?"; then
     mkdir -p "$DEFAULT_BIN_DIR"
-    ln -sf "$PROJECT_ROOT/archforge" "$DEFAULT_BIN_DIR/archforge"
-    echo "Linked $DEFAULT_BIN_DIR/archforge -> $PROJECT_ROOT/archforge"
+    ln -sf "$PROJECT_ROOT/archclone" "$DEFAULT_BIN_DIR/archclone"
+    echo "Linked $DEFAULT_BIN_DIR/archclone -> $PROJECT_ROOT/archclone"
     case ":$PATH:" in
         *":$DEFAULT_BIN_DIR:"*) ;;
         *)
@@ -102,10 +102,10 @@ if install_prompt "Install the 'archforge' launcher to $DEFAULT_BIN_DIR?"; then
             ;;
     esac
 else
-    echo "Skipping launcher installation. Run ArchForge directly via:"
-    echo "  $PROJECT_ROOT/archforge"
+    echo "Skipping launcher installation. Run ArchClone directly via:"
+    echo "  $PROJECT_ROOT/archclone"
 fi
 echo
 
-echo "ArchForge installation complete."
-echo "Try: ./archforge doctor"
+echo "ArchClone installation complete."
+echo "Try: ./archclone doctor"

@@ -10,7 +10,7 @@ generate_manifest() {
 
     cat > "$backup_root/manifest.json" <<EOF2
 {
-  "archforge_version": "${ARCHFORGE_VERSION}",
+  "archclone_version": "${ARCHCLONE_VERSION}",
   "created": "$(date --iso-8601=seconds)",
   "hostname": "$(discover_hostname)",
   "user": "$(discover_user)",

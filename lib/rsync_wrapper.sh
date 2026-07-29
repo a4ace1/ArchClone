@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge rsync Wrapper
+# ArchClone rsync Wrapper
 #
 # Single shared implementation of "copy this path into the backup"
 # and "copy this path back out of the backup" used by every backup
@@ -21,21 +21,21 @@
 
 set -Eeuo pipefail
 
-_archforge_rsync_wrapper_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_archclone_rsync_wrapper_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-source "$_archforge_rsync_wrapper_dir/logging.sh"
-source "$_archforge_rsync_wrapper_dir/utils.sh"
+source "$_archclone_rsync_wrapper_dir/logging.sh"
+source "$_archclone_rsync_wrapper_dir/utils.sh"
 
-: "${ARCHFORGE_EXCLUDE_FILE:=$_archforge_rsync_wrapper_dir/../config/exclude.conf}"
+: "${ARCHCLONE_EXCLUDE_FILE:=$_archclone_rsync_wrapper_dir/../config/exclude.conf}"
 
-unset _archforge_rsync_wrapper_dir
+unset _archclone_rsync_wrapper_dir
 
-# _archforge_relative_to_home <absolute_path>
+# _archclone_relative_to_home <absolute_path>
 #
 # Prints <absolute_path> relative to $HOME. Paths outside $HOME are
 # preserved (minus their leading slash) under a "root/" namespace so
 # they can never collide with a $HOME-relative path.
-_archforge_relative_to_home() {
+_archclone_relative_to_home() {
     local path="$1"
     local home="${HOME%/}"
 
@@ -66,14 +66,14 @@ rsync_backup_path() {
     require_command rsync
 
     local rel dest
-    rel="$(_archforge_relative_to_home "$src")"
+    rel="$(_archclone_relative_to_home "$src")"
     dest="$backup_root/home/$rel"
 
     ensure_directory "$(dirname "$dest")"
 
     local rsync_args=(-aHAX)
-    if [[ -f "$ARCHFORGE_EXCLUDE_FILE" ]]; then
-        rsync_args+=(--exclude-from="$ARCHFORGE_EXCLUDE_FILE")
+    if [[ -f "$ARCHCLONE_EXCLUDE_FILE" ]]; then
+        rsync_args+=(--exclude-from="$ARCHCLONE_EXCLUDE_FILE")
     fi
 
     if [[ -d "$src" ]]; then
@@ -94,7 +94,7 @@ rsync_backup_path() {
 rsync_restore_path() {
     local rel="$1"
     local backup_root="$2"
-    local target_home="${3:-${ARCHFORGE_TARGET_HOME:-$HOME}}"
+    local target_home="${3:-${ARCHCLONE_TARGET_HOME:-$HOME}}"
 
     local src="$backup_root/home/$rel"
     [[ -e "$src" ]] || return 0

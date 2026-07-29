@@ -8,15 +8,15 @@ source "$PROJECT_ROOT/lib/logging.sh"
 source "$PROJECT_ROOT/lib/utils.sh"
 source "$PROJECT_ROOT/lib/archive.sh"
 
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archforge-archive-test.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/archclone-archive-test.XXXXXX")"
 trap 'rm -rf "$SANDBOX"' EXIT
 
-TEST="$SANDBOX/ArchForge-Test"
-ARCHIVE="$SANDBOX/ArchForge-Test.tar.zst"
+TEST="$SANDBOX/ArchClone-Test"
+ARCHIVE="$SANDBOX/ArchClone-Test.tar.zst"
 
 mkdir -p "$TEST"
 echo "hello" > "$TEST/sample.txt"
-echo '{"archforge_version":"test"}' > "$TEST/manifest.json"
+echo '{"archclone_version":"test"}' > "$TEST/manifest.json"
 
 init_logger "$TEST"
 

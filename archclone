@@ -8,19 +8,19 @@ source "$PROJECT_ROOT/lib/version.sh"
 
 usage() {
 cat <<EOF
-ArchForge v${ARCHFORGE_VERSION}
+ArchClone v${ARCHCLONE_VERSION}
 
 Usage:
 
-    ./archforge backup <directory>
+    ./archclone backup <directory>
 
-    ./archforge restore <directory-or-archive> [-y|--yes]
+    ./archclone restore <directory-or-archive> [-y|--yes]
 
-    ./archforge verify <directory>
+    ./archclone verify <directory>
 
-    ./archforge doctor
+    ./archclone doctor
 
-    ./archforge version
+    ./archclone version
 
 EOF
 }
@@ -48,7 +48,7 @@ doctor)
     ;;
 
 version|-v|--version)
-    echo "ArchForge v${ARCHFORGE_VERSION}"
+    echo "ArchClone v${ARCHCLONE_VERSION}"
     ;;
 
 -h|--help|help)

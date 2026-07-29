@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Icons Restore
+# ArchClone Icons Restore
 # ==========================================================
 
 set -Eeuo pipefail
