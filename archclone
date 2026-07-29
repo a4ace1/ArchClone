@@ -2,7 +2,16 @@
 
 set -Eeuo pipefail
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ -f "$SCRIPT_DIR/lib/version.sh" ]]; then
+    PROJECT_ROOT="$SCRIPT_DIR"
+elif [[ -f "/usr/lib/archclone/lib/version.sh" ]]; then
+    PROJECT_ROOT="/usr/lib/archclone"
+else
+    echo "Error: Could not locate ArchClone installation." >&2
+    exit 1
+fi
 
 source "$PROJECT_ROOT/lib/version.sh"
 
