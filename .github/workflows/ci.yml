@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  syntax-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bash syntax check (bash -n)
+        run: |
+          set -e
+          fail=0
+          while IFS= read -r -d '' f; do
+            echo "Checking: $f"
+            bash -n "$f" || fail=1
+          done < <(find . \( -name "*.sh" -o -name "archforge" \) -print0)
+          exit "$fail"
+
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: '.'
+          severity: warning
+          additional_files: 'archforge'
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: syntax-and-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y zstd rsync
+
+      - name: Run unit test suite
+        run: |
+          set -e
+          fail=0
+          for t in tests/*.sh; do
+            echo "=== Running $t ==="
+            bash "$t" || fail=1
+          done
+          exit "$fail"
+
+  e2e-roundtrip:
+    runs-on: ubuntu-latest
+    needs: syntax-and-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y zstd rsync
+
+      - name: Backup -> verify -> compress -> restore (directory and archive) smoke test
+        run: bash tests/e2e/roundtrip_test.sh
+
+      - name: doctor.sh sanity check
+        run: ./doctor.sh || true # informational: this runner won't have pacman/Arch tooling
