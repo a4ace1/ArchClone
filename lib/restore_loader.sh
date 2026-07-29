@@ -8,6 +8,9 @@ load_restore_plugins() {
 
     for module in "$PROJECT_ROOT/restore/"*.sh; do
         [[ -f "$module" ]] || continue
+        # Modules are discovered dynamically by glob; the actual file
+        # list can't be known statically.
+        # shellcheck disable=SC1090
         source "$module"
     done
 }

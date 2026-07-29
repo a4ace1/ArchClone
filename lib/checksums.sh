@@ -12,6 +12,10 @@ generate_checksums() {
     (
         cd "$backup_root"
 
+        # checksums.sha256 is excluded by name in the find filter above,
+        # so truncating it via the `>` redirect before find/sort/xargs
+        # run is safe: its old content is never read.
+        # shellcheck disable=SC2094
         find . -type f \
             ! -name checksums.sha256 \
             ! -name archforge.log \
@@ -30,11 +34,19 @@ verify_checksums() {
 
     info "Verifying backup..."
 
-    (
+    if [[ ! -f "$backup_root/checksums.sha256" ]]; then
+        error "checksums.sha256 not found in: $backup_root"
+        return 1
+    fi
+
+    if (
         cd "$backup_root"
-
         sha256sum -c checksums.sha256
-    )
-
-    success "Verification complete."
+    ); then
+        success "Verification complete."
+        return 0
+    else
+        error "Checksum verification FAILED — one or more files are missing or modified."
+        return 1
+    fi
 }

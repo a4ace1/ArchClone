@@ -11,7 +11,7 @@ rm -rf test_backup
 
 mkdir test_backup
 
-export_packages "./test_backup"
+backup_packages "./test_backup"
 
 echo
 echo "Generated files:"

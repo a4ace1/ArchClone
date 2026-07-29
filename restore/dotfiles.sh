@@ -1,20 +1,16 @@
 #!/usr/bin/env bash
 
 # ==========================================================
-# ArchForge Dotfiles Backup
+# ArchForge Dotfiles Restore
 # ==========================================================
 
 set -Eeuo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
-
-backup_dotfiles() {
+restore_dotfiles() {
 
     local backup_root="$1"
 
-    require_command rsync
-
-    info "Backing up configuration..."
+    info "Restoring configuration..."
 
     local configs=(
         hypr
@@ -35,14 +31,10 @@ backup_dotfiles() {
     )
 
     for item in "${configs[@]}"; do
-
-        local src="$HOME/.config/$item"
-
-        if [[ -e "$src" ]]; then
-            rsync_backup_path "$src" "$backup_root"
-            success "Backed up: .config/$item"
+        if [[ -e "$backup_root/home/.config/$item" ]]; then
+            rsync_restore_path ".config/$item" "$backup_root"
+            success "Restored: .config/$item"
         fi
-
     done
 
     local dotfiles=(
@@ -53,11 +45,9 @@ backup_dotfiles() {
     )
 
     for file in "${dotfiles[@]}"; do
-
-        if [[ -f "$HOME/$file" ]]; then
-            rsync_backup_path "$HOME/$file" "$backup_root"
-            success "Backed up: $file"
+        if [[ -e "$backup_root/home/$file" ]]; then
+            rsync_restore_path "$file" "$backup_root"
+            success "Restored: $file"
         fi
-
     done
 }

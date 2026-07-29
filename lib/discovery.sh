@@ -2,6 +2,15 @@
 
 # ==========================================================
 # ArchForge Discovery Library
+#
+# NOTE on exit statuses: every public discover_* function is safe to
+# call as a bare statement under `set -e` (as the tests and manifest
+# generation do). None of them may end on a command whose exit status
+# reflects "not found" (e.g. a bare `[[ -f x ]] && echo x`), because
+# that pattern makes the *function's own* return status equal to the
+# test's failure, which would abort the calling script under -e.
+# Every function below therefore finishes with an explicit `return 0`
+# (or is structured so its final statement always succeeds).
 # ==========================================================
 
 set -Eeuo pipefail
@@ -11,93 +20,134 @@ source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
 
 discover_hostname() {
     hostnamectl --static 2>/dev/null || hostname
+    return 0
 }
 
 discover_kernel() {
     uname -r
+    return 0
 }
 
 discover_architecture() {
     uname -m
+    return 0
 }
 
 discover_shell() {
     basename "${SHELL:-unknown}"
+    return 0
 }
 
 discover_user() {
     id -un
+    return 0
 }
 
 discover_home() {
     printf "%s\n" "$HOME"
+    return 0
 }
 
 discover_terminal() {
     printf "%s\n" "${TERM:-unknown}"
+    return 0
 }
 
 discover_cpu() {
-    awk -F: '/model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo
+    if [[ -r /proc/cpuinfo ]]; then
+        awk -F: '/model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo
+    else
+        echo "Unknown"
+    fi
+    return 0
 }
 
 discover_memory() {
-    awk '/MemTotal/ {
-        printf "%.1f GB\n", $2 / 1024 / 1024
-    }' /proc/meminfo
+    if [[ -r /proc/meminfo ]]; then
+        awk '/MemTotal/ {
+            printf "%.1f GB\n", $2 / 1024 / 1024
+        }' /proc/meminfo
+    else
+        echo "Unknown"
+    fi
+    return 0
 }
+
 discover_gpu() {
     if command_exists lspci; then
         lspci | awk '/VGA compatible controller|3D controller|Display controller/'
     else
         echo "Unknown"
     fi
+    return 0
 }
+
 discover_hostnamectl() {
     hostnamectl 2>/dev/null || true
+    return 0
 }
 
 discover_filesystem() {
-    findmnt -n -o FSTYPE /
+    if command_exists findmnt; then
+        findmnt -n -o FSTYPE / 2>/dev/null || echo "Unknown"
+    else
+        echo "Unknown"
+    fi
+    return 0
 }
 
 discover_uptime() {
-    uptime -p
+    if command_exists uptime; then
+        uptime -p 2>/dev/null || echo "Unknown"
+    else
+        echo "Unknown"
+    fi
+    return 0
 }
 
 discover_desktop() {
     printf "%s\n" "${XDG_CURRENT_DESKTOP:-Unknown}"
+    return 0
 }
 
 discover_session() {
     printf "%s\n" "${XDG_SESSION_TYPE:-Unknown}"
+    return 0
 }
 
 discover_window_manager() {
-    if pgrep -x Hyprland >/dev/null; then
+    if command_exists pgrep && pgrep -x Hyprland >/dev/null 2>&1; then
         echo "Hyprland"
-    elif pgrep -x sway >/dev/null; then
+    elif command_exists pgrep && pgrep -x sway >/dev/null 2>&1; then
         echo "Sway"
-    elif pgrep -x i3 >/dev/null; then
+    elif command_exists pgrep && pgrep -x i3 >/dev/null 2>&1; then
         echo "i3"
     else
         echo "Unknown"
     fi
+    return 0
 }
+
 discover_package_managers() {
     local managers=()
 
-    for pm in pacman paru yay flatpak snap cargo npm pip pipx go; do
+    for pm in pacman paru yay flatpak snap cargo npm pip pip3 pipx go; do
         if command_exists "$pm"; then
             managers+=("$pm")
         fi
     done
 
-    printf "%s\n" "${managers[@]}"
+    if [[ ${#managers[@]} -gt 0 ]]; then
+        printf "%s\n" "${managers[@]}"
+    fi
+    return 0
 }
 
 discover_shells() {
-    awk -F: '$7 ~ /(bash|zsh|fish|sh)$/ {print $7}' /etc/passwd | sort -u
+    if [[ -r /etc/passwd ]]; then
+        awk -F: '$7 ~ /(bash|zsh|fish|sh)$/ {print $7}' /etc/passwd | sort -u
+    fi
+    return 0
 }
 
 discover_editors() {
@@ -109,7 +159,10 @@ discover_editors() {
         fi
     done
 
-    printf "%s\n" "${editors[@]}"
+    if [[ ${#editors[@]} -gt 0 ]]; then
+        printf "%s\n" "${editors[@]}"
+    fi
+    return 0
 }
 
 discover_terminals() {
@@ -121,7 +174,10 @@ discover_terminals() {
         fi
     done
 
-    printf "%s\n" "${terminals[@]}"
+    if [[ ${#terminals[@]} -gt 0 ]]; then
+        printf "%s\n" "${terminals[@]}"
+    fi
+    return 0
 }
 
 discover_browsers() {
@@ -133,16 +189,23 @@ discover_browsers() {
         fi
     done
 
-    printf "%s\n" "${browsers[@]}"
+    if [[ ${#browsers[@]} -gt 0 ]]; then
+        printf "%s\n" "${browsers[@]}"
+    fi
+    return 0
 }
+
 # ==========================================================
-# Hyprland Discovery
+# Hyprland / Rice Discovery
 # ==========================================================
 
 discover_hyprland_config() {
     local cfg="$HOME/.config/hypr/hyprland.conf"
 
-    [[ -f "$cfg" ]] && printf "%s\n" "$cfg"
+    if [[ -f "$cfg" ]]; then
+        printf "%s\n" "$cfg"
+    fi
+    return 0
 }
 
 discover_hypr_configs() {
@@ -151,111 +214,126 @@ discover_hypr_configs() {
     [[ -d "$dir" ]] || return 0
 
     find "$dir" -type f -name "*.conf" | sort
+    return 0
 }
 
 discover_waybar_config() {
     local dir="$HOME/.config/waybar"
 
-    [[ -d "$dir" ]] && printf "%s\n" "$dir"
+    if [[ -d "$dir" ]]; then
+        printf "%s\n" "$dir"
+    fi
+    return 0
 }
 
 discover_rofi_config() {
     local dir="$HOME/.config/rofi"
 
-    [[ -d "$dir" ]] && printf "%s\n" "$dir"
+    if [[ -d "$dir" ]]; then
+        printf "%s\n" "$dir"
+    fi
+    return 0
 }
 
 discover_alacritty_config() {
     local cfg="$HOME/.config/alacritty/alacritty.toml"
 
-    [[ -f "$cfg" ]] && printf "%s\n" "$cfg"
+    if [[ -f "$cfg" ]]; then
+        printf "%s\n" "$cfg"
+    fi
+    return 0
 }
 
 discover_kitty_config() {
     local cfg="$HOME/.config/kitty/kitty.conf"
 
-    [[ -f "$cfg" ]] && printf "%s\n" "$cfg"
+    if [[ -f "$cfg" ]]; then
+        printf "%s\n" "$cfg"
+    fi
+    return 0
 }
+
 discover_wallpaper_manager() {
-
-    if command_exists hyprpaper; then
-        echo "hyprpaper"
-        return
-    fi
-
-    if command_exists swww; then
-        echo "swww"
-        return
-    fi
-
-    if command_exists waypaper; then
-        echo "waypaper"
-        return
-    fi
-
-    if command_exists feh; then
-        echo "feh"
-        return
-    fi
-
-    if command_exists nitrogen; then
-        echo "nitrogen"
-        return
-    fi
+    for mgr in hyprpaper swww waypaper feh nitrogen; do
+        if command_exists "$mgr"; then
+            echo "$mgr"
+            return 0
+        fi
+    done
 
     echo "unknown"
+    return 0
 }
-discover_fonts() {
 
+discover_fonts() {
     local dirs=(
         "$HOME/.local/share/fonts"
         "$HOME/.fonts"
     )
 
     for dir in "${dirs[@]}"; do
-        [[ -d "$dir" ]] && echo "$dir"
+        if [[ -d "$dir" ]]; then
+            echo "$dir"
+        fi
     done
+    return 0
 }
-discover_themes() {
 
+discover_themes() {
     local dirs=(
         "$HOME/.themes"
         "$HOME/.local/share/themes"
     )
 
     for dir in "${dirs[@]}"; do
-        [[ -d "$dir" ]] && echo "$dir"
+        if [[ -d "$dir" ]]; then
+            echo "$dir"
+        fi
     done
+    return 0
 }
-discover_icons() {
 
+discover_icons() {
     local dirs=(
         "$HOME/.icons"
         "$HOME/.local/share/icons"
     )
 
     for dir in "${dirs[@]}"; do
-        [[ -d "$dir" ]] && echo "$dir"
+        if [[ -d "$dir" ]]; then
+            echo "$dir"
+        fi
     done
+    return 0
 }
-discover_wallpapers() {
 
+discover_wallpapers() {
     local candidates=(
         "$HOME/Wallpapers"
-        "$HOME/Pictures/Wallpapers"
-        "$HOME/Pictures"
         "$HOME/.wallpapers"
         "$HOME/.config/hypr/wallpapers"
     )
 
     for dir in "${candidates[@]}"; do
-        [[ -d "$dir" ]] && printf "%s\n" "$dir"
+        if [[ -d "$dir" ]]; then
+            printf "%s\n" "$dir"
+        fi
     done
+
+    # Prefer the more specific Pictures/Wallpapers if it exists; only
+    # fall back to the whole Pictures directory (which would otherwise
+    # redundantly re-back-up the same files twice) when it doesn't.
+    if [[ -d "$HOME/Pictures/Wallpapers" ]]; then
+        printf "%s\n" "$HOME/Pictures/Wallpapers"
+    elif [[ -d "$HOME/Pictures" ]]; then
+        printf "%s\n" "$HOME/Pictures"
+    fi
 
     if [[ -f "$HOME/.config/hypr/hyprland.conf" ]]; then
         grep -Eo '/[^", ]+\.(png|jpg|jpeg|webp|gif)' \
             "$HOME/.config/hypr/hyprland.conf" 2>/dev/null | \
             xargs -r -n1 dirname | \
-            sort -u
+            sort -u || true
     fi
+    return 0
 }

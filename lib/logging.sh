@@ -34,15 +34,12 @@ _log() {
         "\033[0m" \
         "$message"
 
-echo "========== DEBUG ==========" >&2
-echo "LOG_FILE='$LOG_FILE'" >&2
-echo "PWD='$(pwd)'" >&2
-echo "===========================" >&2
-
-    printf "[%s] [%s] %s\n" \
-        "$(_timestamp)" \
-        "$level" \
-        "$message" >> "$LOG_FILE"
+    if [[ -n "$LOG_FILE" ]]; then
+        printf "[%s] [%s] %s\n" \
+            "$(_timestamp)" \
+            "$level" \
+            "$message" >> "$LOG_FILE"
+    fi
 }
 
 info() {

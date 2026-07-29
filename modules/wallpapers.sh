@@ -7,19 +7,12 @@ source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 backup_wallpapers() {
 
     local backup_root="$1"
-    local target="$backup_root/wallpapers"
-
-    ensure_directory "$target"
 
     info "Backing up wallpapers..."
 
     while IFS= read -r dir; do
-
-        [[ -d "$dir" ]] || continue
-
-        rsync -aHAX "$dir/" "$target/"
-
+        [[ -n "$dir" && -d "$dir" ]] || continue
+        rsync_backup_path "$dir" "$backup_root"
         success "Backed up: $dir"
-
     done < <(discover_wallpapers)
 }

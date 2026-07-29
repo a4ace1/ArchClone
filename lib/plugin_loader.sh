@@ -6,9 +6,14 @@ load_plugins() {
 
     local module
 
+    # Modules are discovered dynamically by glob; the actual file list
+    # can't be known statically.
+    shopt -s nullglob
     for module in "$PROJECT_ROOT/modules/"*.sh; do
+        # shellcheck disable=SC1090
         source "$module"
     done
+    shopt -u nullglob
 }
 
 run_backup_plugins() {

@@ -7,26 +7,15 @@ source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 backup_icons() {
 
     local backup_root="$1"
-    local target="$backup_root/icons"
-
-    ensure_directory "$target"
 
     info "Backing up icon themes..."
 
-    local dirs=(
-        "$HOME/.icons"
-        "$HOME/.local/share/icons"
-    )
+    local dirs
+    mapfile -t dirs < <(discover_icons)
 
     for dir in "${dirs[@]}"; do
-
-        if [[ -d "$dir" ]]; then
-
-            rsync -aHAX "$dir/" "$target/"
-
-            success "Backed up: $dir"
-
-        fi
-
+        [[ -n "$dir" ]] || continue
+        rsync_backup_path "$dir" "$backup_root"
+        success "Backed up: $dir"
     done
 }

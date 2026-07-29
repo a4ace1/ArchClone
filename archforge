@@ -4,16 +4,17 @@ set -Eeuo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-usage() {
+source "$PROJECT_ROOT/lib/version.sh"
 
+usage() {
 cat <<EOF
-ArchForge
+ArchForge v${ARCHFORGE_VERSION}
 
 Usage:
 
     ./archforge backup <directory>
 
-    ./archforge restore <directory>
+    ./archforge restore <directory-or-archive> [-y|--yes]
 
     ./archforge verify <directory>
 
@@ -22,53 +23,41 @@ Usage:
     ./archforge version
 
 EOF
-
 }
 
 case "${1:-}" in
 
 backup)
-
     shift
-
     exec "$PROJECT_ROOT/backup.sh" "$@"
-
     ;;
 
 restore)
-
     shift
-
     exec "$PROJECT_ROOT/restore.sh" "$@"
-
     ;;
 
 verify)
-
     shift
-
     exec "$PROJECT_ROOT/verify.sh" "$@"
-
     ;;
 
 doctor)
-
-    exec "$PROJECT_ROOT/doctor.sh"
-
+    shift
+    exec "$PROJECT_ROOT/doctor.sh" "$@"
     ;;
 
-version)
+version|-v|--version)
+    echo "ArchForge v${ARCHFORGE_VERSION}"
+    ;;
 
-    echo "ArchForge v1.0.1"
-
+-h|--help|help)
+    usage
     ;;
 
 *)
-
     usage
-
     exit 1
-
     ;;
 
 esac
