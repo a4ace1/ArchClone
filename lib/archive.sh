@@ -14,9 +14,16 @@ create_archive() {
 
     info "Creating compressed archive..."
 
+    # --xattrs / --acls: without these, tar silently drops extended
+    # attributes and POSIX ACLs -- the same class of silent fidelity
+    # loss as the symlink problem this change exists to fix, just for
+    # metadata instead of link targets.
+    #
     # Explicitly detach stdin (</dev/null) so tar can never block on,
     # or accidentally consume, the caller's stdin/terminal input.
     tar \
+        --xattrs \
+        --acls \
         --zstd \
         -cf "$output_file" \
         -C "$(dirname "$source_dir")" \
@@ -80,6 +87,8 @@ extract_archive() {
 
     # shellcheck disable=SC2086
     tar $tar_flag \
+        --xattrs \
+        --acls \
         -xf "$archive_file" \
         -C "$dest_dir" \
         < /dev/null

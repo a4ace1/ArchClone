@@ -40,6 +40,24 @@ else
     check_fail "rsync not found — required for all backup/restore modules"
 fi
 
+if tar --help 2>&1 | grep -q -- '--xattrs' && tar --help 2>&1 | grep -q -- '--acls'; then
+    check_pass "tar supports --xattrs/--acls"
+else
+    check_fail "tar does not support --xattrs/--acls — backups will silently drop extended attributes and ACLs"
+fi
+
+if command_exists setfattr && command_exists getfattr; then
+    check_pass "setfattr/getfattr found (attr package)"
+else
+    check_warn "attr package not found — extended attributes may not be readable/settable outside of tar itself"
+fi
+
+if command_exists setfacl && command_exists getfacl; then
+    check_pass "setfacl/getfacl found (acl package)"
+else
+    check_warn "acl package not found — ACLs may not be readable/settable outside of tar itself"
+fi
+
 echo
 echo "== Optional dependencies =="
 for cmd in shellcheck pacman yay flatpak npm pip pip3 pipx cargo hostnamectl lspci findmnt pgrep; do
