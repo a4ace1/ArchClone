@@ -29,6 +29,7 @@ jobs:
           scandir: '.'
           severity: warning
           additional_files: 'archclone'
+          shellcheck_flags: "-x -e SC1091"
 
   unit-tests:
     runs-on: ubuntu-latest
