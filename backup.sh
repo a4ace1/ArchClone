@@ -100,14 +100,18 @@ create_archive \
     "$STAGING_ROOT" \
     "$LOCAL_ARCHIVE"
 
-LOCAL_HASH="$(sha256sum "$LOCAL_ARCHIVE" | cut -d' ' -f1)"
-echo "$LOCAL_HASH  $(basename "$LOCAL_ARCHIVE")" > "${LOCAL_ARCHIVE}.sha256"
-
 TIMESTAMP="$(date +%F-%H%M%S)"
 HOSTNAME_RAW="$(discover_hostname)"
 HOSTNAME_SAFE="$(printf '%s' "$HOSTNAME_RAW" | tr -c 'A-Za-z0-9._-' '_')"
 ARCHIVE_NAME="archclone-${HOSTNAME_SAFE}-${TIMESTAMP}.tar.zst"
 DEST_ARCHIVE="${DEST_DIR%/}/${ARCHIVE_NAME}"
+
+# The sidecar's second column must be the name the file will actually
+# have at the destination, not its temporary staging name -- otherwise
+# `sha256sum -c` against the copied sidecar fails with "no such file"
+# even when the archive is perfectly intact.
+LOCAL_HASH="$(sha256sum "$LOCAL_ARCHIVE" | cut -d' ' -f1)"
+echo "$LOCAL_HASH  $ARCHIVE_NAME" > "${LOCAL_ARCHIVE}.sha256"
 
 info "Copying archive to destination..."
 cp "$LOCAL_ARCHIVE" "$DEST_ARCHIVE"
