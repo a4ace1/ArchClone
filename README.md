@@ -203,6 +203,13 @@ Handle: **@a4ace_1**
 
 ---
 
-## License
+## License & Copyright
 
-MIT License
+Copyright (c) 2026 Abubakar (ACE)
+
+Licensed under the Mozilla Public License 2.0.
+
+You are free to use, modify, and distribute
+this project under the terms of MPL-2.0.
+
+Original copyright notices must be preserved.
